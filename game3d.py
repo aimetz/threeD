@@ -23,12 +23,13 @@ def main():
     b = (0, 0, 255)
     g = (0, 255, 0)
     red = (235, 0, 0)
-    trans = np.asmatrix(np.array([[1, 0, 0], [0, 1, 0]]))
+    trans = np.dot(np.asmatrix(np.array([[1, 0, 0], [0, 1, 0]])), rotate_x(7))
     corns = [np.asmatrix(np.array([[0], [5000], [0]])), np.asmatrix(np.array([[5000], [5000], [0]])), 
              np.asmatrix(np.array([[5000], [0], [0]])), np.asmatrix(np.array([[0], [0], [0]]))]
     #corns3 = [np.asmatrix(np.array([[0], [500], [0]])), np.asmatrix(np.array([[500], [500], [0]])), np.asmatrix(np.array([[500], [0], [0]])),
     #          np.asmatrix(np.array([[500], [0], [-2]])), np.asmatrix(np.array([[500], [500], [-10]])), np.asmatrix(np.array([[0], [500], [-8]]))]
-
+    print("Use arrows to move around and z/x to look around")
+    print("wasd still broken")
 
     man = Man()
     rotations = [0, 0, 0]
@@ -39,16 +40,16 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     pygame.key.set_repeat(5)
-                    man.step([[-1], [0], [0]])
+                    man.step([[2], [0], [0]])
                 if event.key == pygame.K_RIGHT:
                     pygame.key.set_repeat(5)
-                    man.step([[1], [0], [0]])
+                    man.step([[-1], [0], [0]])
                 if event.key == pygame.K_DOWN:
                     pygame.key.set_repeat(5)
-                    man.step([[0], [1], [0]])
+                    man.step([[0], [-2], [0]])
                 if event.key == pygame.K_UP:
                    pygame.key.set_repeat(5)
-                   man.step([[0], [-1], [0]])
+                   man.step([[0], [2], [0]])
                 if event.key == pygame.K_SPACE:
                     pygame.key.set_repeat()
                     if man.pos.item(2) == -100:
@@ -91,9 +92,22 @@ def main():
         #for i in range(6):
         #    pos3 =  np.dot(trans, corns3[i])
         #    po3 += [(pos3.item(0)+300, pos3.item(1)+400)]
-
+        
         screen.fill(white)
         pygame.draw.polygon(screen, g, po)
+
+        lines = []
+        for q in range(0, 5000, 100):
+            a = np.dot(trans, np.asmatrix(np.array([[q], [0], [0]])))
+            aa = np.dot(trans, np.asmatrix(np.array([[q], [5000], [0]]))) 
+            b = np.dot(trans, np.asmatrix(np.array([[0], [q], [0]])))
+            bb = np.dot(trans, np.asmatrix(np.array([[5000], [q], [0]])))
+            lines += [((a.item(0)+man.pos.item(0), a.item(1)+man.pos.item(1)), 
+                      (aa.item(0)+man.pos.item(0), aa.item(1)+man.pos.item(1))), 
+                      ((b.item(0)+man.pos.item(0), b.item(1)+man.pos.item(1)), 
+                      (bb.item(0)+man.pos.item(0), bb.item(1)+man.pos.item(1)))]
+        for line in lines:
+            pygame.draw.line(screen, red, line[0], line[1], 1)
         #pygame.draw.polygon(screen, b, po2)
         #pygame.draw.polygon(screen, green, po3)
 
