@@ -6,7 +6,8 @@ import numpy as np
 
 class Man:
     def __init__(self):
-        self.pos = np.asmatrix(np.array([[300], [300], [-300]]))
+        self.pos = np.asmatrix(np.array([[300], [400], [0]]))
+        self.view = np.asmatrix(np.array([[1], [0], [0]]))
     def step(self, direction):
         self.pos += np.asmatrix(np.array(direction))
 
@@ -23,12 +24,11 @@ def main():
     g = (0, 255, 0)
     red = (235, 0, 0)
     trans = np.asmatrix(np.array([[1, 0, 0], [0, 1, 0]]))
-    corns = [np.asmatrix(np.array([[0], [500], [0]])), np.asmatrix(np.array([[500], [500], [0]])), 
-             np.asmatrix(np.array([[500], [0], [0]])), np.asmatrix(np.array([[0], [0], [0]]))]
-    #corns3 = [np.asmatrix(np.array([[100], [500], [-300]])), np.asmatrix(np.array([[500], [500], [-300]])), np.asmatrix(np.array([[500], [100], [-300]])),
-    #          np.asmatrix(np.array([[500], [100], [-302]])), np.asmatrix(np.array([[500], [500], [-310]])), np.asmatrix(np.array([[100], [500], [-308]]))]
+    corns = [np.asmatrix(np.array([[0], [5000], [0]])), np.asmatrix(np.array([[5000], [5000], [0]])), 
+             np.asmatrix(np.array([[5000], [0], [0]])), np.asmatrix(np.array([[0], [0], [0]]))]
+    #corns3 = [np.asmatrix(np.array([[0], [500], [0]])), np.asmatrix(np.array([[500], [500], [0]])), np.asmatrix(np.array([[500], [0], [0]])),
+    #          np.asmatrix(np.array([[500], [0], [-2]])), np.asmatrix(np.array([[500], [500], [-10]])), np.asmatrix(np.array([[0], [500], [-8]]))]
 
-    corns2 = [np.asmatrix(np.array([[100], [500], [-100]])), np.asmatrix(np.array([[500], [500], [-100]])), np.asmatrix(np.array([[500], [100], [-100]])), np.asmatrix(np.array([[100], [100], [-100]]))]
 
     man = Man()
     rotations = [0, 0, 0]
@@ -52,9 +52,9 @@ def main():
                 if event.key == pygame.K_SPACE:
                     pygame.key.set_repeat()
                     if man.pos.item(2) == -100:
-                        man.step([[0], [0], [-200]])
+                        man.step([[0], [0], [100]])
                     else:
-                        man.step([[0], [0], [200]])
+                        man.step([[0], [0], [-100]])
                 if event.key == pygame.K_a:
                     pygame.key.set_repeat()
                     rotations[0] -= 1
@@ -78,24 +78,25 @@ def main():
                 if event.key == pygame.K_x:
                     pygame.key.set_repeat()
                     rotations[2] += 1
+                    trans = np.dot(trans, rotate_z(1))
+        mp = np.dot(trans, man.pos)
         po = []
-        po2 = []
+        #po2 = []
         #po3 = []
         for i in range(4):
             pos =  np.dot(trans, corns[i])
-            po += [(pos.item(0)+300, pos.item(1)+400)]
-            pos2 =  np.dot(trans, corns2[i])
-            po2 += [(pos2.item(0)+300, pos2.item(1)+400)]
+            po += [(pos.item(0)+man.pos.item(0), pos.item(1)+man.pos.item(1))]
+        #    pos2 =  np.dot(trans, corns2[i])
+        #    po2 += [(pos2.item(0)+300, pos2.item(1)+400)]
         #for i in range(6):
         #    pos3 =  np.dot(trans, corns3[i])
-        #    po3 += [(pos3.item(0)+300, pos3.item(1))]
+        #    po3 += [(pos3.item(0)+300, pos3.item(1)+400)]
 
         screen.fill(white)
         pygame.draw.polygon(screen, g, po)
-        pygame.draw.polygon(screen, b, po2)
+        #pygame.draw.polygon(screen, b, po2)
         #pygame.draw.polygon(screen, green, po3)
-        mp = np.dot(trans, man.pos)
-        pygame.draw.circle(screen, red, (mp.item(0)+300, mp.item(1)), .02 * man.pos.item(1)+3)
+
 
 
         pygame.display.update()
