@@ -65,19 +65,20 @@ def main():
             dists += [check_ray(man.pos.item(0), man.pos.item(1), angle[0].item(0), angle[0].item(1), angle[1], map)]
         x = 0
         pygame.draw.rect(screen, (98, 221, 240), (0, 0, width, 200))
+        color = (100, 100, 100)
         for dist in dists:
             if dist[0] > 0:
                 line = 50*(width**2 + height**2)**.5/dist[0]
             else:
                 line = 650
-            if line > 650:
-                line = 650
             if dist[1] == 0:
-                pygame.draw.line(screen, (100, 100, 100), (x, 200 - line/2), (x, 200+line/2))
+                color = (100, 100, 100)
+                pygame.draw.line(screen, color, (x, 200 - line/2), (x, 200+line/2))
             elif dist[1] ==1:
-                pygame.draw.line(screen, (75, 75, 75), (x, 200 - line/2), (x, 200+line/2))
+                color = (75, 75, 75)
+                pygame.draw.line(screen, color, (x, 200 - line/2), (x, 200+line/2))
             else:
-                pygame.draw.line(screen, (0, 0, 0), (x, 200 - line/2), (x, 200+line/2))            
+                pygame.draw.line(screen, color, (x, 200 - line/2), (x, 200+line/2))            
             x += 1
         pygame.display.update()
 
