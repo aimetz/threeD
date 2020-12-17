@@ -53,7 +53,7 @@ def main():
                     man.pos -= man.view
                 if event.key == pygame.K_UP:
                     man.pos += man.view
-        screen.fill(white)
+        screen.fill((0, 75, 0))
         #for i in range(6):
         #    for j in range(8):
         #        if map[i][j] == 1:
@@ -64,6 +64,7 @@ def main():
         for angle in man.all():
             dists += [check_ray(man.pos.item(0), man.pos.item(1), angle[0].item(0), angle[0].item(1), angle[1], map)]
         x = 0
+        pygame.draw.rect(screen, (98, 221, 240), (0, 0, width, 200))
         for dist in dists:
             if dist[0] > 0:
                 line = 50*(width**2 + height**2)**.5/dist[0]
